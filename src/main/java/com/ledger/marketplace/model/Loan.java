@@ -80,7 +80,7 @@ public class Loan implements CommandData
     {
         int totalLumSum = this.payments.stream().filter(p -> p.getEmi() <= emi)
             .collect(Collectors.summingInt(LoanPayment::getLumpSum));
-        int amountPaid = (this.emiAmount * emi) + totalLumSum;
+        int amountPaid = Math.min((this.emiAmount * emi) + totalLumSum, this.totalAmount);
         int newEmiNo = (int) Math.ceil((double) (this.totalAmount - amountPaid) / this.emiAmount);
         int remainingEmi = Math.min(this.emiNo - emi, newEmiNo);
         return new Balance(this.identifier, amountPaid, remainingEmi);
